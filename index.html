@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AB Monitor</title>
+  <style>
+    /* A monitor controller's faceplate: graphite blue, silkscreen text, an LED colour per pair. */
+    :root {
+      color-scheme: dark;
+      --plate: #22262d; --panel: #2c313a; --well: #1a1d22; --edge: #3a404a;
+      --silk: #a4adb8; --text: #eef1f4;
+      --a: #ffb547; --a-glow: rgba(255, 181, 71, .35);
+      --b: #62c8f0; --b-glow: rgba(98, 200, 240, .35);
+      --warn: #f07b52;
+      --round: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body { background: var(--plate); color: var(--text); font: 13px/1.35 var(--round); user-select: none; -webkit-font-smoothing: antialiased; }
+    button, select, input { font: inherit; color: inherit; }
+    button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+    .face { padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* Top: name and language */
+    .top { display: flex; align-items: center; justify-content: space-between; }
+    .top h1 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+    .tools { display: flex; align-items: center; gap: 6px; }
+    .hist { white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 9px; border-radius: 8px; border: 1px solid var(--edge); background: var(--well); color: var(--text); font-size: 12px; cursor: pointer; }
+    .hist.icon { padding: 0 7px; }
+    .hist:disabled { color: #5d646f; cursor: default; }
+    .lang { background: var(--well); border: 1px solid var(--edge); border-radius: 8px; padding: 4px 8px; color: var(--silk); font-size: 12px; }
+
+    /* Status line with its LED */
+    .status { display: flex; align-items: center; gap: 10px; min-height: 36px; }
+    .status .st { display: flex; flex-direction: column; gap: 1px; }
+    .led { width: 10px; height: 10px; border-radius: 50%; background: #4a505a; flex: none; }
+    .status.A .led { background: var(--a); box-shadow: 0 0 10px var(--a-glow), 0 0 2px var(--a); }
+    .status.B .led { background: var(--b); box-shadow: 0 0 10px var(--b-glow), 0 0 2px var(--b); }
+    .status.warn .led { background: var(--warn); box-shadow: 0 0 8px rgba(240,123,82,.5); }
+    #statusText { font-size: 15px; font-weight: 700; }
+    #statusSub { color: var(--silk); font-size: 12px; }
+
+    /* The two monitors: the memorable thing */
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .mon { --c: var(--a); --g: var(--a-glow); --lvl: 0; position: relative; border: 1px solid var(--edge); border-radius: 14px; background: var(--panel); padding: 10px 10px 9px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: border-color .15s, box-shadow .15s; }
+    .mon.b { --c: var(--b); --g: var(--b-glow); }
+    .mon:hover { border-color: #4b525d; }
+    .mon svg { width: 74px; height: 96px; display: block; }
+    .mon .cab { fill: var(--well); stroke: #454c57; stroke-width: 2; }
+    .mon .cone { fill: #2a2f37; stroke: #4c535e; stroke-width: 2; }
+    .mon .cap { fill: #353b44; }
+    .mon .ring { fill: none; stroke: var(--c); stroke-width: 4; opacity: 0; }
+    .mon .letter { font-size: 30px; font-weight: 800; line-height: 1; color: #6e7682; }
+    .mon .sub { font-size: 11px; color: var(--silk); }
+    .mon.on { border-color: var(--c); box-shadow: 0 0 0 1px var(--c), 0 8px 26px -10px var(--g); }
+    .mon.on .letter { color: var(--c); }
+    .mon.on .cone { stroke: var(--c); }
+    .mon.on .ring { opacity: calc(.18 + var(--lvl) * .82); }
+    .monwrap { position: relative; display: grid; }
+    .pen { position: absolute; top: 6px; left: 6px; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 6px; border: 1px solid transparent; background: transparent; color: var(--silk); cursor: pointer; opacity: 0; transition: opacity .12s; }
+    .monwrap:hover .pen, .pen:focus-visible { opacity: 1; }
+    .pen:hover { border-color: var(--edge); background: var(--well); color: var(--text); }
+    .rename { position: absolute; left: 8px; right: 8px; bottom: 7px; height: 22px; border-radius: 6px; border: 1px solid var(--c, var(--a)); background: var(--well); color: var(--text); font: inherit; font-size: 12px; text-align: center; padding: 0 6px; }
+    .monwrap:nth-child(2) .rename { border-color: var(--b); }
+    .mon .sub { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mon .dot { position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; border-radius: 50%; background: #474d57; }
+    .mon.on .dot { background: var(--c); box-shadow: 0 0 8px var(--g); }
+
+    /* Mono and Dim: latching keys with an LED */
+    .keys { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .key { display: flex; align-items: center; justify-content: center; gap: 8px; height: 38px; border-radius: 10px; border: 1px solid var(--edge); background: var(--panel); font-weight: 700; cursor: pointer; }
+    .key .led { width: 8px; height: 8px; }
+    .key.on { border-color: var(--warn); }
+    .key.on .led { background: var(--warn); box-shadow: 0 0 8px rgba(240,123,82,.6); }
+
+    /* Settings well */
+    .well { background: var(--well); border-radius: 12px; padding: 11px 12px; display: grid; grid-template-columns: auto 1fr auto; gap: 10px 10px; align-items: center; }
+    .well label { color: var(--silk); }
+    .well select { grid-column: 2 / 4; justify-self: start; background: var(--panel); border: 1px solid var(--edge); border-radius: 8px; padding: 4px 8px; }
+    input[type=range] { width: 100%; accent-color: var(--text); }
+    .val { font-variant-numeric: tabular-nums; min-width: 62px; text-align: right; font-weight: 700; }
+
+    /* Prepare */
+    #prep { border-radius: 12px; border: 1px solid var(--warn); background: rgba(240,123,82,.12); padding: 10px 12px; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 2px; }
+    #prep .pt { font-weight: 800; font-size: 14px; color: var(--warn); }
+    #prep .ps { font-size: 12px; color: var(--silk); }
+    #prep.ready { border-color: var(--edge); background: transparent; padding: 7px 12px; }
+    #prep.ready .pt { color: var(--text); font-size: 13px; }
+    #prep:disabled { opacity: .6; cursor: progress; }
+
+    /* Setup: signal flow and checks */
+    .setup { background: var(--panel); border-radius: 12px; padding: 10px 12px 12px; }
+    .setup > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+    .setup > summary::-webkit-details-marker { display: none; }
+    .setup .state { font-size: 12px; font-weight: 700; }
+    .setup .state.ok { color: #7fd69a; } .setup .state.bad { color: var(--warn); }
+    .flow { display: block; width: 100%; height: auto; margin: 10px 0 6px; }
+    .flow text { font: 700 11px var(--round); fill: var(--text); }
+    .flow .small { font-weight: 400; fill: var(--silk); font-size: 9.5px; }
+    .flow .node { fill: var(--well); stroke: var(--edge); stroke-width: 1.5; }
+    .flow .node.missing { stroke: var(--warn); stroke-dasharray: 4 3; }
+    .flow .wire { fill: none; stroke: #4a515c; stroke-width: 2; }
+    .flow .wire.missing { stroke: var(--warn); stroke-dasharray: 4 3; }
+    .flow .wire.liveA { stroke: var(--a); } .flow .wire.liveB { stroke: var(--b); }
+    .flow .node.liveA { stroke: var(--a); } .flow .node.liveB { stroke: var(--b); }
+    .flow .node.mixnode { fill: rgba(224, 49, 49, .22); stroke: #e03131; }
+    .check { display: grid; grid-template-columns: 16px 1fr auto; gap: 2px 8px; padding: 6px 0; border-top: 1px solid #353b45; align-items: start; }
+    .check .ic { font-weight: 800; text-align: center; }
+    .check .ic.ok { color: #7fd69a; } .check .ic.bad { color: var(--warn); } .check .ic.info { color: var(--silk); }
+    .check .tx small { display: block; color: var(--silk); font-size: 11.5px; margin-top: 1px; }
+    .check button { background: var(--well); border: 1px solid var(--edge); border-radius: 8px; padding: 3px 9px; cursor: pointer; font-size: 12px; }
+
+    /* How it works */
+    .help { color: var(--silk); }
+    .help > summary { cursor: pointer; color: var(--text); font-weight: 700; list-style: none; }
+    .help > summary::-webkit-details-marker { display: none; }
+    .help > summary::before { content: '?'; display: inline-grid; place-items: center; width: 17px; height: 17px; margin-right: 7px; border-radius: 50%; border: 1px solid var(--edge); font-size: 11px; color: var(--silk); }
+    .help p { margin: 8px 0 0; max-width: 60ch; font-size: 12.5px; line-height: 1.5; }
+    .help p:nth-child(4) { color: var(--text); border-left: 3px solid var(--warn); padding-left: 9px; }
+
+    #msg { font-size: 11.5px; color: var(--silk); min-height: 1.2em; }
+    #msg.error { color: var(--warn); }
+
+
+    @media (prefers-reduced-motion: reduce) { .mon { transition: none; } }
+  </style>
+</head>
+<body>
+  <div class="face">
+    <div class="top">
+      <h1>AB Monitor</h1>
+      <div class="tools">
+        <button id="undo" class="hist"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M6 3 2 7l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 7H10a4 4 0 0 1 0 8H8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span id="undoLabel"></span></button>
+        <select id="lang" class="lang" aria-label="Language"></select>
+      </div>
+    </div>
+
+    <div class="status" id="status" aria-live="polite"><span class="led"></span><span class="st"><span id="statusText"></span><span id="statusSub"></span></span></div>
+
+    <button id="prep"><span class="pt"></span><span class="ps"></span></button>
+
+    <div class="pair">
+      <div class="monwrap">
+        <button class="mon a" id="btnA">
+          <span class="dot"></span>
+          <svg viewBox="0 0 74 96" aria-hidden="true"><rect class="cab" x="3" y="2" width="68" height="92" rx="9"/><circle class="cone" cx="37" cy="24" r="9"/><circle class="cap" cx="37" cy="24" r="3"/><circle class="ring" cx="37" cy="63" r="24"/><circle class="cone" cx="37" cy="63" r="20"/><circle class="cap" cx="37" cy="63" r="6.5"/></svg>
+          <span class="letter">A</span><span class="sub" id="subA"></span>
+        </button>
+        <button class="pen" id="penA" type="button"><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path d="M11 2.5 13.5 5 6 12.5 3 13l.5-3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+        <input class="rename" id="nameA" maxlength="24" hidden>
+      </div>
+      <div class="monwrap">
+        <button class="mon b" id="btnB">
+          <span class="dot"></span>
+          <svg viewBox="0 0 74 96" aria-hidden="true"><rect class="cab" x="3" y="2" width="68" height="92" rx="9"/><circle class="cone" cx="37" cy="24" r="9"/><circle class="cap" cx="37" cy="24" r="3"/><circle class="ring" cx="37" cy="63" r="24"/><circle class="cone" cx="37" cy="63" r="20"/><circle class="cap" cx="37" cy="63" r="6.5"/></svg>
+          <span class="letter">B</span><span class="sub" id="subB"></span>
+        </button>
+        <button class="pen" id="penB" type="button"><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path d="M11 2.5 13.5 5 6 12.5 3 13l.5-3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+        <input class="rename" id="nameB" maxlength="24" hidden>
+      </div>
+    </div>
+
+    <div class="keys">
+      <button class="key" id="btnMono"><span class="led"></span><span id="monoLabel"></span></button>
+      <button class="key" id="btnDim"><span class="led"></span><span id="dimLabel"></span></button>
+    </div>
+
+    <div class="well">
+      <label for="cue" id="cueLabel"></label>
+      <select id="cue"><option value="1">CUE 1</option><option value="2">CUE 2</option><option value="3">CUE 3</option><option value="4">CUE 4</option></select>
+      <label for="trim" id="trimLabel"></label>
+      <input id="trim" type="range" min="-12" max="12" step="0.5" value="0">
+      <span id="trimVal" class="val">0.0 dB</span>
+    </div>
+
+    <details class="setup" id="setup">
+      <summary><span id="setupTitle"></span><span class="state" id="setupState"></span></summary>
+      <svg class="flow" id="flow" viewBox="0 0 300 92" role="img"></svg>
+      <div id="checks"></div>
+    </details>
+
+    <details class="help" id="help">
+      <summary id="helpTitle"></summary>
+      <div id="helpBody"></div>
+    </details>
+
+    <div id="msg"></div>
+  </div>
+
+  <script src="vendor/luna.global.js"></script>
+  <script src="i18n.js"></script>
+  <script src="logic.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

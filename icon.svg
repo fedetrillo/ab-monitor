@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Two pairs of speakers and the switch between them: A (amber) is playing, B (cyan) waits. -->
+  <defs>
+    <radialGradient id="glowA" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffb547" stop-opacity=".35"/><stop offset="1" stop-color="#ffb547" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="104" fill="#16181c"/>
+  <rect x="24" y="24" width="464" height="464" rx="86" fill="#22262d" stroke="#343a44" stroke-width="4"/>
+
+  <!-- A: lit -->
+  <circle cx="148" cy="262" r="118" fill="url(#glowA)"/>
+  <rect x="70" y="76" width="156" height="252" rx="26" fill="#1a1d22" stroke="#ffb547" stroke-width="8"/>
+  <circle cx="148" cy="138" r="26" fill="#2a2f37" stroke="#ffb547" stroke-width="7"/>
+  <circle cx="148" cy="138" r="8" fill="#ffb547"/>
+  <circle cx="148" cy="244" r="58" fill="none" stroke="#ffb547" stroke-width="10" opacity=".55"/>
+  <circle cx="148" cy="244" r="44" fill="#2a2f37" stroke="#ffb547" stroke-width="7"/>
+  <circle cx="148" cy="244" r="14" fill="#ffb547"/>
+
+  <!-- B: waiting -->
+  <rect x="286" y="76" width="156" height="252" rx="26" fill="#1a1d22" stroke="#4c535e" stroke-width="8"/>
+  <circle cx="364" cy="138" r="26" fill="#2a2f37" stroke="#5a626e" stroke-width="7"/>
+  <circle cx="364" cy="138" r="8" fill="#5a626e"/>
+  <circle cx="364" cy="244" r="44" fill="#2a2f37" stroke="#5a626e" stroke-width="7"/>
+  <circle cx="364" cy="244" r="14" fill="#5a626e"/>
+
+  <!-- The switch: a toggle set to A, with A and B on either side -->
+  <text x="112" y="428" font-family="Arial Rounded MT Bold, Helvetica Neue, Arial, sans-serif" font-weight="800" font-size="76" fill="#ffb547" text-anchor="middle">A</text>
+  <text x="400" y="428" font-family="Arial Rounded MT Bold, Helvetica Neue, Arial, sans-serif" font-weight="800" font-size="76" fill="#62c8f0" text-anchor="middle">B</text>
+  <rect x="176" y="368" width="160" height="72" rx="36" fill="#1a1d22" stroke="#4c535e" stroke-width="6"/>
+  <circle cx="212" cy="404" r="26" fill="#ffb547"/>
+</svg>

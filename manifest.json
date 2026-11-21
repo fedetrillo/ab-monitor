@@ -1,0 +1,30 @@
+{
+    "package_name": "AB Monitor",
+    "id": "com.fedetrillo.ab_monitor",
+    "title": "AB Monitor",
+    "name": "AB Monitor",
+    "version": "1.0.0",
+    "manufacturer": "Fede Trillo",
+    "contact": "fedetrillo@gmail.com",
+    "description": [
+        "Switch between two pairs of speakers from LUNA, with any audio interface: A on the Main Output, B on a cue bus. ",
+        "Mono, dim, a trim per pair and your own names for each pair. ",
+        "One click puts every track into a clean red MIX folder (no plugins, console or tape), and Undo MIX puts it all back. ",
+        "In 7 languages."
+    ],
+    "categories": [
+        "Mixing & Mastering"
+    ],
+    "icon": "icon.png",
+    "sdk_version": "3.1.2",
+    "min_luna_version": "3.1.2",
+    "engines": [
+        "luna"
+    ],
+    "html": "index.html",
+    "target": "window",
+    "floating": true,
+    "show_with_session": true,
+    "width": 340,
+    "height": 660
+}
