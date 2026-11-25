@@ -49,6 +49,9 @@ B un CUE enviado a otras salidas. Mono, Dim, trim por par y tus propios nombres 
 Con un clic, Preparar MIX mete todas las pistas en una carpeta MIX roja sin ningún proceso
 (plugins, consola ni cinta), y Deshacer MIX lo devuelve todo a como estaba. En 7 idiomas.
 
+The first time it opens, it asks for your language and then a short guide walks you through the
+window in it; the **?** button brings it back whenever you need it.
+
 ## Licence
 
 Copyright (c) 2026 Fede Trillo. All rights reserved. Free to install and use in LUNA; the code

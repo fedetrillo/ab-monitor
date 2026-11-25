@@ -123,6 +123,14 @@
 
 
     @media (prefers-reduced-motion: reduce) { .mon { transition: none; } }
+    #guideBtn { min-width: 26px; width: 26px; height: 26px; padding: 0; justify-content: center; }
+    .top { gap: 8px; }
+    .top h1 { white-space: nowrap; flex-shrink: 0; }
+    .tools { gap: 5px; min-width: 0; }
+    .tools .hist { min-width: 0; overflow: hidden; }
+    #undoLabel { overflow: hidden; text-overflow: ellipsis; }
+    .lang { max-width: 88px; }
+    #guideBtn b { font-weight: 800; }
   </style>
 </head>
 <body>
@@ -131,6 +139,7 @@
       <h1>AB Monitor</h1>
       <div class="tools">
         <button id="undo" class="hist"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M6 3 2 7l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 7H10a4 4 0 0 1 0 8H8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span id="undoLabel"></span></button>
+        <button id="guideBtn" aria-label="Guide"><b>?</b></button>
         <select id="lang" class="lang" aria-label="Language"></select>
       </div>
     </div>
@@ -188,6 +197,7 @@
   </div>
 
   <script src="vendor/luna.global.js"></script>
+  <script src="tour.js"></script>
   <script src="i18n.js"></script>
   <script src="logic.js"></script>
   <script src="main.js"></script>
