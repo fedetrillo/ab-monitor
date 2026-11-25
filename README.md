@@ -1,9 +1,13 @@
 # AB Monitor for LUNA
 
-Switch between two pairs of speakers from LUNA, whatever your audio interface: your main
-monitors and a second pair (a small mono speaker, earbuds, a car-style pair…), with a click.
+A monitor controller inside LUNA, no extra hardware: switch between two pairs of speakers with
+one click, whatever your audio interface: your main monitors and a second pair (a small mono
+speaker, earbuds, a car-style pair…).
 
-![AB Monitor](icon.png)
+<p>
+  <img src="docs/screenshot-a.png" alt="AB Monitor, A playing" width="300">
+  <img src="docs/screenshot-b.png" alt="AB Monitor, B playing" width="300">
+</p>
 
 ## Features
 

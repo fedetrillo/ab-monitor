@@ -41,7 +41,9 @@
     $('helpTitle').textContent = t('help');
     $('helpBody').replaceChildren(...['help1', 'help2', 'help3', 'help6', 'help4', 'help7', 'help5'].map((k) => Object.assign(document.createElement('p'), { textContent: t(k) })));
     $('lang').setAttribute('aria-label', t('language'));
-    $('undoLabel').textContent = t('undo'); $('undo').title = t('undoTitle');
+    $('undoLabel').textContent = t('undo'); $('undo').title = `${t('undo')}: ${t('undoTitle')}`;
+    // In a narrow window the full label does not fit next to the title: keep the arrow and MIX.
+    requestAnimationFrame(() => { const u = $('undoLabel'); if (u.scrollWidth > u.clientWidth + 1) u.textContent = 'MIX'; });
     paintMessage();
   }
   let repaint = () => {};

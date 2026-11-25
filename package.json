@@ -1,7 +1,7 @@
 {
   "name": "ab_monitor",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "AB Monitor, a LUNA Add On by Fede Trillo",
   "scripts": {
