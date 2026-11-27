@@ -29,9 +29,23 @@
     $('msg').classList.toggle('error', message.error);
   }
 
+  // Version in the header; Alt-click copies a report to send when something looks wrong.
+  const VERSION = '1.0.3';
+  const errors = [];
+  window.addEventListener('error', (e) => { errors.push(String(e.message)); errors.splice(0, errors.length - 10); });
+  $('ver').textContent = `v${VERSION}`;
+  $('ver').addEventListener('click', async (ev) => {
+    if (!ev.altKey) return;
+    const s = built;
+    let st = null; try { st = s ? L.status(s, loadCfg(s.uid).cue) : null; } catch { /* not fatal */ }
+    const text = JSON.stringify({ addOn: 'AB Monitor', version: VERSION, luna: luna?.version?.value ?? null, platform: navigator.platform, ua: navigator.userAgent, lang, window: window.AddOnWinFit?.info?.() ?? null, session: s?.name.value ?? null, cfg: s ? loadCfg(s.uid) : null, status: st, tracks: s?.tracks.items.length ?? 0, message, errors }, (k, v) => (v && typeof v === 'object' && !Array.isArray(v) && Object.getPrototypeOf(v) !== Object.prototype ? undefined : v), 2);
+    try { if (await AddOnCopy(text)) say('report'); } catch { /* nothing */ }
+  });
+
   /** The texts that do not depend on the session. */
   function paintStatic() {
     document.documentElement.lang = lang;
+    $('ver').title = t('reportTip');
     $('guideBtn').title = t('guide'); $('guideBtn').setAttribute('aria-label', t('guide'));
     $('monoLabel').textContent = t('mono'); $('btnMono').title = t('monoTitle');
     $('dimLabel').textContent = t('dim'); $('btnDim').title = t('dimTitle');

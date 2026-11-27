@@ -4,6 +4,7 @@
 
 const I18N = {
   es: {
+    report: 'Informe copiado: pégalo en un mensaje al desarrollador', reportTip: 'Alt-clic: copiar un informe',
     _name: 'Español',
     language: 'Idioma',
     playingA: 'Suena A', playingB: 'Suena B', playingBoth: 'Suenan A y B', playingNone: 'Silencio',
@@ -74,6 +75,7 @@ const I18N = {
     help7: 'Puedes poner nombre a tus altavoces: doble clic en A o B (o en el lápiz) y escribe, por ejemplo, Genelec o Auratone. Enter guarda, Esc cancela, y si lo dejas vacío vuelve el nombre de la salida.',
   },
   en: {
+    report: 'Report copied: paste it in a message to the developer', reportTip: 'Alt-click: copy a report',
     _name: 'English',
     language: 'Language',
     playingA: 'A is playing', playingB: 'B is playing', playingBoth: 'A and B are playing', playingNone: 'Silent',
@@ -144,6 +146,7 @@ const I18N = {
     help7: 'You can name your speakers: double-click A or B (or the pencil) and type, for example, Genelec or Auratone. Enter saves, Esc cancels, and leaving it empty brings back the output\'s name.',
   },
   fr: {
+    report: 'Rapport copié : collez-le dans un message au développeur', reportTip: 'Alt-clic : copier un rapport',
     _name: 'Français',
     language: 'Langue',
     playingA: 'A est actif', playingB: 'B est actif', playingBoth: 'A et B sont actifs', playingNone: 'Silence',
@@ -214,6 +217,7 @@ const I18N = {
     help7: 'Vous pouvez nommer vos enceintes : double-cliquez sur A ou B (ou sur le crayon) et tapez, par exemple, Genelec ou Auratone. Entrée enregistre, Échap annule, et un nom vide remet celui de la sortie.',
   },
   de: {
+    report: 'Bericht kopiert: füge ihn in eine Nachricht an den Entwickler ein', reportTip: 'Alt-Klick: Bericht kopieren',
     _name: 'Deutsch',
     language: 'Sprache',
     playingA: 'A spielt', playingB: 'B spielt', playingBoth: 'A und B spielen', playingNone: 'Stumm',
@@ -284,6 +288,7 @@ const I18N = {
     help7: 'Du kannst deine Lautsprecher benennen: Doppelklick auf A oder B (oder auf den Stift) und tippe zum Beispiel Genelec oder Auratone. Enter speichert, Esc bricht ab, und ein leerer Name bringt den Namen des Ausgangs zurück.',
   },
   it: {
+    report: 'Rapporto copiato: incollalo in un messaggio allo sviluppatore', reportTip: 'Alt-clic: copia un rapporto',
     _name: 'Italiano',
     language: 'Lingua',
     playingA: 'Suona A', playingB: 'Suona B', playingBoth: 'Suonano A e B', playingNone: 'Silenzio',
@@ -354,6 +359,7 @@ const I18N = {
     help7: 'Puoi dare un nome ai tuoi diffusori: doppio clic su A o B (o sulla matita) e scrivi, per esempio, Genelec o Auratone. Invio salva, Esc annulla, e se lo lasci vuoto torna il nome dell\'uscita.',
   },
   pt: {
+    report: 'Relatório copiado: cola-o numa mensagem ao programador', reportTip: 'Alt-clique: copiar um relatório',
     _name: 'Português',
     language: 'Idioma',
     playingA: 'A a tocar', playingB: 'B a tocar', playingBoth: 'A e B a tocar', playingNone: 'Silêncio',
@@ -424,6 +430,7 @@ const I18N = {
     help7: 'Podes dar nome às tuas colunas: duplo clique em A ou B (ou no lápis) e escreve, por exemplo, Genelec ou Auratone. Enter guarda, Esc cancela, e se o deixares vazio volta o nome da saída.',
   },
   ca: {
+    report: "Informe copiat: enganxa'l en un missatge al desenvolupador", reportTip: 'Alt-clic: copiar un informe',
     _name: 'Català',
     language: 'Idioma',
     playingA: 'Sona A',

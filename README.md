@@ -41,6 +41,11 @@ exactly as before. Prepare MIX removes them, and a check warns you if one appear
 2. Open a session and choose **Add Ons > Windows > AB Monitor**.
 3. Pick that cue under **B is**, then press **Prepare MIX**.
 
+## Support
+
+If something does not work as expected, Alt-click the version number at the top of the window:
+it copies a short report to paste in a message to fedetrillo@gmail.com.
+
 ## Install
 
 Requires LUNA 3.1.2 or later. Install it from LUNA's Add On marketplace, or download
