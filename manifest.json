@@ -1,25 +1,27 @@
 {
-    "package_name": "AB Monitor",
-    "id": "com.fedetrillo.ab_monitor",
-    "title": "AB Monitor",
-    "name": "AB Monitor",
-    "version": "1.0.3",
-    "manufacturer": "Fede Trillo",
-    "contact": "fedetrillo@gmail.com",
-    "description": "A monitor controller inside LUNA: switch your mix between two pairs of speakers with one click, on any audio interface, no extra hardware. Mono, dim, a trim per pair so A and B play at the same level, and your speakers' names. One click also prepares a clean MIX folder, and Undo MIX puts everything back. Getting-started guide, 7 languages.",
-    "categories": [
-        "Mixing & Mastering"
-    ],
-    "icon": "icon.png",
-    "sdk_version": "3.1.2",
-    "min_luna_version": "3.1.2",
-    "engines": [
-        "luna"
-    ],
-    "html": "index.html",
-    "target": "window",
-    "floating": true,
-    "show_with_session": true,
-    "width": 340,
-    "height": 660
+  "package_name": "AB Monitor",
+  "id": "com.fedetrillo.ab_monitor",
+  "title": "AB Monitor",
+  "name": "AB Monitor",
+  "version": "1.0.3",
+  "manufacturer": "Fede Trillo",
+  "contact": "fedetrillo@gmail.com",
+  "description": [
+    "Check your mix on a second pair of speakers with one click, no extra hardware. AB Monitor switches LUNA between your main monitors and a second pair (a small mono speaker, earbuds, a car-style pair), with mono, dim and both pairs matched in level, on any audio interface."
+  ],
+  "categories": [
+    "Mixing & Mastering"
+  ],
+  "icon": "icon.png",
+  "sdk_version": "3.1.2",
+  "min_luna_version": "3.1.2",
+  "engines": [
+    "luna"
+  ],
+  "html": "index.html",
+  "target": "window",
+  "floating": true,
+  "show_with_session": true,
+  "width": 340,
+  "height": 660
 }
